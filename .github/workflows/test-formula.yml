@@ -1,0 +1,39 @@
+name: test-formula
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+  workflow_dispatch:
+
+jobs:
+  test:
+    name: brew install (${{ matrix.os }})
+    runs-on: ${{ matrix.os }}
+    strategy:
+      fail-fast: false
+      matrix:
+        os: [ubuntu-latest, macos-latest]
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: brew tap (local)
+        run: |
+          brew tap pirj/aq "$GITHUB_WORKSPACE"
+
+      - name: brew audit
+        run: brew audit --strict --new --formula pirj/aq/aq
+
+      - name: brew install
+        run: brew install --verbose pirj/aq/aq
+
+      - name: brew test
+        run: brew test pirj/aq/aq
+
+      - name: aq --help
+        # `aq --version` and `aq --help` both invoke detect_host at script
+        # load time, which requires /dev/kvm on Linux runners (not present).
+        # Just verify the script is on PATH and parses cleanly under bash.
+        run: |
+          command -v aq
+          bash -n "$(command -v aq)"
