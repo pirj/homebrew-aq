@@ -1,7 +1,7 @@
 class Aq < Formula
   desc "QEMU wrapper to run Alpine Linux VMs on macOS and Linux"
   homepage "https://github.com/pirj/aq"
-  url "https://github.com/pirj/aq.git", tag: "v2.5.6", revision: "b13eed29b245c1cb7ff86481eea4ae9a7f9eb500"
+  url "https://github.com/pirj/aq.git", tag: "v2.5.7", revision: "3d83caadebba6932beb2f7a4bdb493236671e03c"
   license "MIT"
   head "https://github.com/pirj/aq.git", branch: "main"
 
@@ -18,7 +18,24 @@ class Aq < Formula
   end
 
   def caveats
-    on_linux do
+    if OS.mac?
+      <<~EOS
+        macOS Apple Silicon + live snapshots:
+          QEMU 11.0.0 (currently the homebrew-core release) has an upstream
+          aarch64-HVF regression that asserts on every incoming migration,
+          so `aq new --from-snapshot=<live-tag>` will fail. Cold snapshots,
+          fanout from cold tags, and everything else work fine. Linux KVM
+          is unaffected.
+
+          Workaround until QEMU 11.1.0 ships: PATH-prepend the previous
+          keg if `brew upgrade` left it around (it usually does):
+              ls /opt/homebrew/Cellar/qemu
+              export PATH="/opt/homebrew/Cellar/qemu/10.0.3/bin:$PATH"
+              qemu-system-aarch64 --version    # expect "version 10.0.3"
+
+          See aq README Troubleshooting for the full root-cause writeup.
+      EOS
+    else
       <<~EOS
         On Linux, aq additionally needs:
 
