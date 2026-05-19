@@ -1,7 +1,7 @@
 class Aq < Formula
   desc "QEMU wrapper to run Alpine Linux VMs on macOS and Linux"
   homepage "https://github.com/pirj/aq"
-  url "https://github.com/pirj/aq.git", tag: "v2.5.2", revision: "99c16f2bd9c4f3ea999c93c24f22656fb3e10e23"
+  url "https://github.com/pirj/aq.git", tag: "v2.5.4", revision: "7dd2515f4dcae89f96ec1fe776b78f4e33bac043"
   license "MIT"
   head "https://github.com/pirj/aq.git", branch: "main"
 
