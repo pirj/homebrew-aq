@@ -1,7 +1,7 @@
 class Aq < Formula
   desc "QEMU wrapper to run Alpine Linux VMs on macOS and Linux"
   homepage "https://github.com/pirj/aq"
-  url "https://github.com/pirj/aq.git", tag: "v2.5.1", revision: "7239c9287609361b815f3b8bc7e9c168bd9003b5"
+  url "https://github.com/pirj/aq.git", tag: "v2.5.2", revision: "99c16f2bd9c4f3ea999c93c24f22656fb3e10e23"
   license "MIT"
   head "https://github.com/pirj/aq.git", branch: "main"
 
@@ -14,6 +14,7 @@ class Aq < Formula
 
   def install
     bin.install "aq"
+    bash_completion.install "completions/aq.bash" => "aq"
   end
 
   def caveats
