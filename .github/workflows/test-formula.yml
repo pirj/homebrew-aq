@@ -21,18 +21,14 @@ jobs:
         id: set-up-homebrew
         uses: Homebrew/actions/setup-homebrew@master
 
-      - name: brew tap (local)
-        run: |
-          brew tap pirj/aq "$GITHUB_WORKSPACE"
+      - name: brew audit (from checkout)
+        run: brew audit --strict --new --formula ./Formula/aq.rb
 
-      - name: brew audit
-        run: brew audit --strict --new --formula pirj/aq/aq
-
-      - name: brew install
-        run: brew install --verbose pirj/aq/aq
+      - name: brew install (from checkout)
+        run: brew install --verbose ./Formula/aq.rb
 
       - name: brew test
-        run: brew test pirj/aq/aq
+        run: brew test aq
 
       - name: aq --help
         # `aq --version` and `aq --help` both invoke detect_host at script
