@@ -21,15 +21,14 @@ jobs:
         id: set-up-homebrew
         uses: Homebrew/actions/setup-homebrew@main
 
-      - name: brew install (from checkout)
-        # brew on Linux runners doesn't accept paths to `brew audit` anymore,
-        # so the install is the audit equivalent for our purposes — any
-        # formula-format issue stops the build here. Local audit (macOS dev
-        # box) is still run on each formula change.
-        run: brew install --verbose ./Formula/aq.rb
+      - name: brew install (from tap)
+        # setup-homebrew auto-registers this checkout as the pirj/aq tap
+        # (because the repo name is homebrew-aq), so the formula is
+        # available by tap-qualified name. Brew rejects raw paths now.
+        run: brew install --verbose pirj/aq/aq
 
       - name: brew test
-        run: brew test aq
+        run: brew test pirj/aq/aq
 
       - name: aq on PATH + parses
         # Don't invoke `aq --version` or `aq --help`: both call detect_host
